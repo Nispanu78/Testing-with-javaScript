@@ -12,17 +12,6 @@ describe("Investment", function() {
             sharePrice: 20
         });
     });
-        describe("when its stock share price valorizes", function() {
-            beforeEach(function(){
-                stock.sharePrice = 40;
-                });
-            it("should have a positive return of investment", function() {
-                    expect(investment.roi()).toEqual(1);
-                    });
-            it("should be a good investment", function() {
-                    expect(investment.isGood()).toEqual(true);
-                    });
-        });
 // The first acceptance criterion is described with the global function "it"
 // It contains two parameters: 1) title of the spec which is "should be of a stock", 2) a function that contains the spec code;
     it("should be of a stock", function() {
@@ -39,5 +28,29 @@ describe("Investment", function() {
     it("should have the invested shares' quantity", function() {
         expect(investment.shares).toEqual(100);
     });
+            describe("when its stock share price valorizes", function() {
+                beforeEach(function(){
+                    stock.sharePrice = 40;
+                    });
+                it("should have a positive return of investment", function() {
+                        expect(investment.roi()).toEqual(1);
+                        });
+                it("should be a good investment", function() {
+                        expect(investment).toBeAGoodInvestment();
+                        });
+            });
+                        describe("When its stock price devalorizes", function() {
+                            beforeEach(function() {
+                                stock.sharePrice = 0;
+                            });
+
+                            it("should have a negative return of investment", function() {
+                                expect(investment.roi()).toEqual(-1);
+                            });
+                            it("should be a bad investment", function() {
+                                expect(investment).not.toBeAGoodInvestment();
+
+                            });
+                        });
 
 });
