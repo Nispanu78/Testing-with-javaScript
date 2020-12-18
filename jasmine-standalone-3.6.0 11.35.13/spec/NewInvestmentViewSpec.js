@@ -1,4 +1,4 @@
-describe("NewInvestmentView", function() {
+describe("InvestmentTracker", function() {
   beforeEach(function() {
     loadFixtures('NewInvestmentView.html');
     appendLoadFixtures('InvestmentListView.html');
@@ -7,15 +7,20 @@ describe("NewInvestmentView", function() {
       id: 'investment-list'
     });
 
-    view = new NewInvestmentView({
-      id: 'new-investment',
-      listView: listView
+    newView = new NewInvestmentView({
+      id: 'new-investment'
     });
- });
- describe("when its add button is clicked", function() {
+
+    application = new InvestmentTracker({
+      listView: listView,
+      newView: newView
+    });
+  });
+
+  describe("when a new investment is created", function() {
     beforeEach(function() {
       // fill form inputs
-      // simulate the clicking of the button
+      newView.create();
     });
 
     it("should add the investment to the list", function() {
