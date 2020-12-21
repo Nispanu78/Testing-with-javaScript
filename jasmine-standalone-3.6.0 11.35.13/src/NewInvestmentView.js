@@ -1,21 +1,90 @@
 (function ($, Investment, Stock) {
   function NewInvestmentView (params) {
-      this.$element = $(params.selector);
-      NewInvestmentView.prototype.setSymbol = function(value) {
-        this.$('.new-investment-stock-symbol').val(value);
-        };
-    }
-  function InvestmentTracker (params) {
-  this.listView = params.listView;
-  this.newView = params.newView;
+    var that = this;
 
-  this.newView.onCreate(function (investment) {
-    this.listView.addInvestment(investment);
-        }.bind(this));
-    }
-  NewInvestmentView.prototype.create = function() {
-  this._callback(/* new investment */);
-};
+    that._callback = function () {};
 
-this.NewInvestmentView = NewInvestmentView;
+    that.$element = $(params.selector);
+    that._$stockSymbol = that.$('.new-investment-stock-symbol');
+    that._$shares = that.$('.new-investment-shares');
+    that._$sharePrice = that.$('.new-investment-share-price');
+    that._$add = that.$('input[type=submit]');
+
+    bindEvents.call(that);
+    reset.call(that);
+  }
+
+  NewInvestmentView.prototype = {
+    $: function () {
+      var that = this;
+
+      return that.$element.find.apply(that.$element, arguments);
+    },
+
+    create: function () {
+      var that = this;
+
+      var newInvestment = new Investment({
+        stock: new Stock({symbol: that._$stockSymbol.val()}),
+        shares: parseInt(that._$shares.val(), 10),
+        sharePrice: parseInt(that._$sharePrice.val(), 10)
+      });
+
+      return newInvestment;
+    },
+
+    getSymbol: function () {
+      return this._$stockSymbol.val();
+    }
+  };
+
+  // private methods (invoke with 'call')
+
+  function bindEvents () {
+    var that = this;
+
+    that.$element.on('submit', function (event) {
+      event.preventDefault();
+      submit.call(that);
+    });
+
+    that.$element.on('change', 'input', updateAddButton.bind(that));
+  }
+
+  function submit () {
+    var that = this;
+
+    that.create();
+    reset.call(that);
+  }
+
+  function updateAddButton () {
+    var that = this;
+
+    if (canCreate.call(that)) {
+      that._$add.enableInput();
+    } else {
+      that._$add.disableInput();
+    }
+  }
+
+  function canCreate () {
+    var that = this;
+
+    return that._$stockSymbol.val().length > 0 &&
+           that._$shares.val() > 0 &&
+           that._$sharePrice.val() > 0;
+  }
+
+  function reset () {
+    var that = this;
+
+    that._$stockSymbol.val('');
+    that._$stockSymbol.focus();
+    that._$shares.val('0');
+    that._$sharePrice.val('0');
+    that._$add.disableInput();
+  }
+
+  this.NewInvestmentView = NewInvestmentView;
 })(jQuery, Investment, Stock);
