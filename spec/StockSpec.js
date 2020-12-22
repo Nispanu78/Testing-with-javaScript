@@ -13,12 +13,17 @@ describe("Stock", function() {
     expect(stock.sharePrice).toEqual(originalSharePrice);
   });
 
-  it("should be able to update its share price", function(done) {
-    stock.fetch({
-      success: function () {
-        expect(stock.sharePrice).toEqual(20.18);
-        done();
-      }
+  describe("when fetched", function() {
+    beforeEach(function() {
+      spyOn($, 'getJSON').and.callFake(function(url, callback) {
+        callback({ sharePrice: 20.18 });
+      });
+
+      stock.fetch();
+    });
+
+    it("should update its share price", function() {
+      expect(stock.sharePrice).toEqual(20.18);
     });
   });
 });
