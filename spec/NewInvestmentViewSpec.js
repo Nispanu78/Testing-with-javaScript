@@ -45,6 +45,57 @@ describe("NewInvestmentView", function() {
       expect(newInvestment.sharePrice).toEqual(20);
     });
 
+    describe("when its add button is clicked", function() {
+      beforeEach(function() {
+        spyOnEvent(view.$element, 'submit');
+
+        view.$element.find('input[type=submit]').click();
+      });
+
+      it("should submit the form", function() {
+        expect('submit').toHaveBeenTriggeredOn(view.$element);
+      });
+    });
+
+    describe("and when the form is submitted", function() {
+      beforeEach(function() {
+        spyOn(view, 'create');
+        spyOnEvent(view.$element, 'submit');
+
+        view.$element.submit();
+      });
+
+      it("should prevent the event default behavior", function() {
+        expect('submit').toHaveBeenPreventedOn(view.$element);
+      });
+
+      it("should create an investment", function() {
+        expect(view.create).toHaveBeenCalled();
+      });
+
+      itShouldBeAtTheDefaultState();
+    });
+
+    describe("and when an investment is created", function() {
+      var callbackSpy;
+      var investment;
+
+      beforeEach(function() {
+        callbackSpy = jasmine.createSpy('callback');
+        view.onCreate(callbackSpy);
+
+        investment = view.create();
+      });
+
+      it("should invoke the 'onCreate' callback with the created investment", function() {
+        expect(callbackSpy).toHaveBeenCalled();
+        expect(callbackSpy).toHaveBeenCalledWith(investment);
+
+        expect(callbackSpy.calls.any()).toBeTruthy();
+        expect(callbackSpy.calls.mostRecent().args[0]).toBe(investment);
+      });
+    });
+
     describe("when the stock input is cleared", function() {
       beforeEach(function() {
         view.$element.find('.new-investment-stock-symbol').val('').trigger('change');
