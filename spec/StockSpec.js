@@ -15,8 +15,18 @@ describe("Stock", function() {
 
   describe("when fetched", function() {
     beforeEach(function() {
-      spyOn($, 'getJSON').and.callFake(function(url, callback) {
-        callback({ sharePrice: 20.18 });
+      jasmine.Ajax.install();
+    });
+
+    afterEach(function() {
+      jasmine.Ajax.uninstall();
+    });
+
+    beforeEach(function() {
+      jasmine.Ajax.stubRequest('http://localhost:8000/stocks/AOUE').andReturn({
+        'status': 200,
+        'contentType': 'application/json',
+        'responseText': '{ "sharePrice": 20.18 }'
       });
 
       stock.fetch();
