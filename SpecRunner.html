@@ -12,6 +12,7 @@
   <script src="lib/jasmine-3.6.0/boot.js"></script>
 
   <script src="lib/react-with-addons.js"></script>
+  <script src="lib/JSXTransformer.js"></script>
   <script src="lib/jquery.js"></script>
   <script src="lib/jasmine-jquery.js"></script>
   <script src="lib/mock-ajax.js"></script>
@@ -27,7 +28,7 @@
   src="src/Investment.js"></script>
   <script src="src/jquery-disable-input.js"></script>
   <script src="src/NewInvestmentView.js"></script>
-  <script src="src/components/InvestmentListItem.js"></script>
+  <script src="src/components/InvestmentListItem.jsx"></script>
 
 
   <script src="spec/SpecHelper.js"></script>
@@ -39,7 +40,10 @@
   <script src="spec/jquery-disable-input-spec.js"></script>
   <script type="text/javascript" src="spec/InvestmentSpec.js"></script>
   <script src="spec/NewInvestmentViewSpec.js"></script>
-  <script src="spec/components/InvestmentListItemSpec.js"></script>
+  <script src="spec/components/InvestmentListItemSpec.jsx"></script>
+
+  <!-- After all JSX files were loaded and processed, the tests can finally run -->
+  <script src="lib/jasmine-3.6.0/boot-exec.js" type="text/jsx"></script>
 
 </head>
 
